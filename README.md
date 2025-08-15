@@ -1,75 +1,179 @@
-# 🎙️ Alpaca Voice Agent
+# AI Voice Agent 🎙️
 
-## 📖 Overview
-The **Alpaca Voice Agent** is an AI-powered conversational assistant that listens, thinks, and talks back — all in real time.  
-It uses **AssemblyAI** for speech-to-text (STT), **OpenAI** for generating intelligent responses, and **TTS APIs** for natural audio playback.  
-With a sleek UI and robust error handling, it delivers a smooth, interactive voice experience right in your browser.
-
----
+A conversational AI voice agent built with FastAPI that combines Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS) technologies to create a seamless voice-based interaction experience.
 
 ## ✨ Features
-- 🎤 **Speech-to-Text (STT)** — Converts spoken words into text with AssemblyAI.
-- 🧠 **Conversational AI** — Uses LLMs to generate natural, context-aware responses.
-- 🔊 **Text-to-Speech (TTS)** — Plays responses in realistic, human-like voices.
-- ⚠️ **Error Handling** — Returns fallback audio like *"I'm having trouble connecting right now"* if APIs fail.
-- 💻 **Clean UI** — Simple, responsive, and easy to interact with.
 
----
+- **Speech-to-Text**: Convert audio input to text using AssemblyAI
+- **AI Conversations**: Intelligent responses powered by Google Gemini
+- **Text-to-Speech**: Natural voice output using Murf AI
+- **Session Management**: Persistent chat history for conversational context
+- **Audio Processing**: Upload, transcribe, and generate audio files
+- **RESTful API**: Clean, documented API endpoints
+- **Error Handling**: Robust fallback mechanisms for service failures
 
-## 🛠 Tech Stack
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Python, FastAPI
-- **APIs:** AssemblyAI (STT), GeminiAI (LLM), Murf TTS API
+## 🏗️ Architecture
 
----
+```
+voice-agent/
+│
+├── services/
+│   ├── stt_service.py        # Speech-to-text logic (AssemblyAI)
+│   ├── tts_service.py        # Text-to-speech logic (Murf AI)
+│   └── llm_service.py        # LLM logic (Google Gemini)
+│
+├── static/                   # Frontend files
+├── uploads/                  # Audio file uploads
+├── main.py                   # FastAPI application
+├── requirements.txt          # Python dependencies
+├── .env                      # Environment variables
+└── README.md                 # This file
+```
 
-## 🗺 Architecture
-1. User speaks into the mic → Browser records audio  
-2. Audio sent to backend → Processed via AssemblyAI STT  
-3. Transcript sent to LLM API → Response generated  
-4. Response converted to audio via TTS API  
-5. Audio sent back to browser → Played for the user  
+## 🚀 Quick Start
 
----
+### Prerequisites
 
-## ⚙️ Setup & Installation
+- Python 3.8+
+- API keys for:
+  - [AssemblyAI](https://www.assemblyai.com/)
+  - [Murf AI](https://murf.ai/)
+  - [Google AI Studio](https://ai.google.dev/)
 
-### 1️⃣ Get the Project
-Download the project folder from the source provided (ZIP file or local copy) and extract it to your desired location.
+### Installation
 
-### 2️⃣ Set Environment Variables
-Create a `.env` file in the backend folder with your API keys:
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/ai-voice-agent.git
+cd ai-voice-agent
+```
 
-```env
-MURF_API_KEY="Your API key here"
-# Get your key from https://murf.ai/
-
-GEMINI_API_KEY="Your API key here"
-# Get your key from https://ai.google.dev
-
-ASSEMBLYAI_API_KEY="Your API key here"
-# Get your key from https://www.assemblyai.com/
-
-### 3️⃣ Install Dependencies
-
-If you have requirements.txt:
-
+2. Install dependencies:
+```bash
 pip install -r requirements.txt
+```
 
-Or manually:
+3. Create a `.env` file:
+```env
+MURF_API_KEY=your_murf_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+ASSEMBLYAI_API_KEY=your_assemblyai_api_key_here
+```
 
-pip install fastapi uvicorn requests python-dotenv assemblyai openai
+4. Run the application:
+```bash
+python main.py
+```
 
-### 4️⃣ Start the Backend
-uvicorn main:app --reload
+The API will be available at `http://localhost:8000`
 
-### 5️⃣ Open the Frontend
+## 📡 API Endpoints
 
-Once your server is up and running navigate to 
+### Core Endpoints
 
-https://localhost:8000
+- `GET /` - Serve the main interface
+- `GET /ping` - Health check
+- `GET /health` - Comprehensive service health check
 
+### Audio Processing
 
+- `POST /upload-audio/` - Upload audio files
+- `POST /transcribe/file` - Transcribe audio to text
+- `POST /generate-audio/` - Generate speech from text
+- `POST /tts-echo` - Echo transcribed audio as speech
 
+### AI Interaction
 
+- `POST /llm/query` - Single query processing (STT → LLM → TTS)
+- `POST /agent/chat/{sessionId}` - Conversational chat with memory
+- `GET /agent/chat/{sessionId}` - Retrieve chat history
+- `DELETE /agent/chat/{sessionId}` - Clear chat history
 
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `MURF_API_KEY` | Murf AI API key for text-to-speech | Yes |
+| `GEMINI_API_KEY` | Google Gemini API key for LLM | Yes |
+| `ASSEMBLYAI_API_KEY` | AssemblyAI API key for speech-to-text | Yes |
+
+### Service Configuration
+
+- **Default TTS Voice**: `en-US-natalie`
+- **Default LLM Model**: `gemini-2.5-flash`
+- **Upload Directory**: `uploads/`
+- **Max File Size**: 50MB
+
+## 🛠️ Technologies Used
+
+- **Backend**: FastAPI, Python
+- **AI Services**: 
+  - AssemblyAI (Speech-to-Text)
+  - Google Gemini (Language Model)
+  - Murf AI (Text-to-Speech)
+- **Data Validation**: Pydantic
+- **HTTP Client**: Requests
+- **Environment Management**: python-dotenv
+
+## 📝 Usage Examples
+
+### Generate Audio from Text
+```bash
+curl -X POST "http://localhost:8000/generate-audio/" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello, world!", "voice_id": "en-US-natalie"}'
+```
+
+### Start a Conversation
+```bash
+curl -X POST "http://localhost:8000/agent/chat/session123" \
+  -F "file=@audio.wav"
+```
+
+## 🔒 Security Notes
+
+- API keys are stored in environment variables
+- CORS is currently set to allow all origins (⚠️ restrict for production)
+- File uploads are stored locally (consider cloud storage for production)
+
+## 🚧 Development
+
+### Project Structure
+
+The application follows a modular architecture:
+
+- **Services Layer**: Encapsulates third-party API interactions
+- **Models**: Pydantic schemas for request/response validation  
+- **Routes**: FastAPI endpoints with proper error handling
+- **Configuration**: Environment-based settings management
+
+### Adding New Features
+
+1. Create service classes in the `services/` directory
+2. Define Pydantic models for data validation
+3. Add routes in `main.py` with proper error handling
+4. Update documentation and tests
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📞 Support
+
+For questions and support, please open an issue in the GitHub repository.
+
+---
+
+**30 Days of AI Voice Agents - Day 14** 🎯
+
+*Part of the 30-day AI voice agent development challenge. This project demonstrates clean architecture, service separation, and production-ready code practices.*
