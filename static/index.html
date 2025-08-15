@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Alpaca Voice Agent</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Alpaca Voice Agent</h1>
+
+        <!-- Voice Agent Section -->
+        <section class="card">
+            <h2>Conversational Agent</h2>
+            <button id="record-toggle" class="record-button">🎤 Start Recording</button>
+            
+            <!--Recording indicator-->
+            <div id="recording-indicator" class="recording-indicator">
+                <span class="pulse"></span> Recording...
+            </div>
+
+            <audio id="playback" autoplay controls></audio>
+            <div id="upload-status" class="output">Click "Start Recording" to begin your conversation</div>
+        </section>
+    </div>
+    
+    <script src="/static/main.js"></script>
+</body>
+</html>
