@@ -44,8 +44,8 @@ voice-agent/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ai-voice-agent.git
-cd ai-voice-agent
+git clone https://github.com/Noorscript/Alpaca-Voice-Agent.git
+cd Alpaca-Voice-Agent
 ```
 
 2. Install dependencies:
@@ -62,7 +62,7 @@ ASSEMBLYAI_API_KEY=your_assemblyai_api_key_here
 
 4. Run the application:
 ```bash
-python main.py
+uvicorn main:app --reload
 ```
 
 The API will be available at `http://localhost:8000`
